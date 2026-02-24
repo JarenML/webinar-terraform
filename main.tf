@@ -18,12 +18,14 @@ resource "aws_instance" "nginx-server" {
     vpc_security_group_ids = [
         aws_security_group.nginx-server-sg.id
     ]
+
 }
 
 #### SSH #####
 resource "aws_key_pair" "nginx-key" {
     key_name = "nginx-server"
     public_key = file("nginx-server.key.pub")
+    # ssh-keygen -t rsa -b 2048 -f "nginx-server.key"
 }
 
 ##### SG ####
