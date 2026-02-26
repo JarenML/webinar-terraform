@@ -1,3 +1,26 @@
+####### Variables #########
+variable "ami_id" {
+    description = "ID de la AMI para la instancia EC2"
+    default = "ami-0440d3b780d96b29d"
+}
+
+variable "instance_type" {
+    description = "Tipo de isntancia EC2"
+    default = "t3.micro"
+}
+
+variable "server_name" {
+    description = "Nombre del servidor web"
+    default = "nginx-server"
+}
+
+variable "environment" {
+    description = "Ambiente de la aplicacion"
+    default = "test"
+}
+
+
+
 #### provider #### 
 provider "aws" {
     region = "us-east-1"
@@ -5,8 +28,8 @@ provider "aws" {
 
 ##### resource ####
 resource "aws_instance" "nginx-server" {
-    ami = "ami-0440d3b780d96b29d"
-    instance_type = "t3.micro"
+    ami = var.ami_id
+    instance_type = var.instance_type
 
     user_data = <<-EOF
                 #!/bin/bash
@@ -20,8 +43,8 @@ resource "aws_instance" "nginx-server" {
     ]
 
     tags = {
-        Name = "nginx-server"
-        Environment = "test"
+        Name = var.server_name
+        Environment = var.environment
         Owner = "jaren.ramos@sistemas.com.pe"
         Team = "DevOps"
         Project = "webinar"
@@ -30,13 +53,13 @@ resource "aws_instance" "nginx-server" {
 
 #### SSH #####
 resource "aws_key_pair" "nginx-key" {
-    key_name = "nginx-server-ssh"
-    public_key = file("nginx-server.key.pub")
+    key_name = "${var.server_name}-ssh"
+    public_key = file("${var.server_name}.key.pub")
     # ssh-keygen -t rsa -b 2048 -f "nginx-server.key"
 
     tags = {
-        Name = "nginx-server-ssh"
-        Environment = "test"
+        Name = "${var.server_name}-ssh"
+        Environment = var.environment
         Owner = "jaren.ramos@sistemas.com.pe"
         Team = "DevOps"
         Project = "webinar"
@@ -45,7 +68,7 @@ resource "aws_key_pair" "nginx-key" {
 
 ##### SG ####
 resource "aws_security_group" "nginx-server-sg" {
-    name = "nginx-server-sg"
+    name = "${var.server_name}-sg"
     description = "Security group allowing SSH and HTTP access"
 
     ingress {
@@ -70,8 +93,8 @@ resource "aws_security_group" "nginx-server-sg" {
     }
 
     tags = {
-        Name = "nginx-server-sg"
-        Environment = "test"
+        Name = "${var.server_name}-sg"
+        Environment = var.environment
         Owner = "jaren.ramos@sistemas.com.pe"
         Team = "DevOps"
         Project = "webinar"
