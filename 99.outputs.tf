@@ -1,15 +1,21 @@
-#### output ####
-output "server_public_ip" {
+#### outputs ####
+output "nginx_dev_ipX" {
     description = "Dirección IP pública de la instancia EC2"
-    value = aws_instance.nginx-server.public_ip
+    value = module.nginx_server.server_public_ip
 }
 
-output "server_public_dns" {
+output "nginx_dev_dnsX" {
     description = "DNS público de la instancia EC2"
-    value = aws_instance.nginx-server.public_dns
+    value = module.nginx_server.server_public_dns
 }
 
-output "ec2_instance" {
-    description = "Name instance ec2"
-    value = aws_instance.nginx-server.tags["Name"]
+#### outputs ####
+output "nginx_qa_ipX" {
+    description = "Dirección IP pública de la instancia EC2"
+    value = module.nginx_server.server_public_ip
+}
+
+output "nginx_qa_dnsX" {
+    description = "DNS público de la instancia EC2"
+    value = module.nginx_server.server_public_dns
 }

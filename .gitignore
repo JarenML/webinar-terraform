@@ -6,6 +6,7 @@ terraform.tfstate
 terraform.tfstate.backup
 *.tfstate
 *.tfstate.*
+*.tfplan
 
 # Terraform variable files (may contain secrets)
 *.tfvars
